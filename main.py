@@ -1,16 +1,48 @@
 import os
 import hashlib
 import sys
+import zlib 
+import StringIO
 
 eicar = 'C:/Users/gksru/Documents/programming/anti-virus/eicar.txt'
 dummy = 'C:/Users/gksru/Documents/programming/anti-virus/Dummy.txt'
+
 
 VirusDB = []
 vdb=[]
 vsize=[]
 
+def DecodeKMD(fname):
+    try:
+        fp = open(fname, 'rb')
+        buf = fp.read()
+        fp.close()
+        
+        buf2 = buf[:-32]
+        fmd5 = buf[-32:]
+        
+        f = buf2
+        for i in range(3):
+            md5 = hashlib.md5()
+            md5.update(f)
+            f = md5.hexdigest()
+        
+        if f != fmd5:
+            raise SystemError
+        
+        buf3 = ''
+        for c in buf2[4:]:
+            buf3 += chr(ord(c) ^ 0xFF)
+        buf4 = zlib.decompress(buf3)
+        return buf4
+    except:
+        pass
+    
+    return None
+
 def LoadVirusDB():
-    fp=open('virus.db','rb')
+    buf = DecodeKMD('virus.kmd')
+    fp=StringIO.StringIO(buf)
     
     while True:
         line = fp.readline()
@@ -18,7 +50,7 @@ def LoadVirusDB():
         
         line = line.strip()
         VirusDB.append(line)
-    
+        
     fp.close()
 
 def MakeVirusDB():
