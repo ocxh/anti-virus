@@ -4,12 +4,22 @@ import sys
 
 eicar = 'C:/Users/gksru/Documents/programming/anti-virus/eicar.txt'
 dummy = 'C:/Users/gksru/Documents/programming/anti-virus/Dummy.txt'
-VirusDB = [
-    '67:7e8043cdf89ae1e2d54e5793f8a73a4f:EICAR Test' ,
-    '65:77bff0b143e4840ae73d4582a8914a43:Dummy Test'
-]
+
+VirusDB = []
 vdb=[]
 vsize=[]
+
+def LoadVirusDB():
+    fp=open('virus.db','rb')
+    
+    while True:
+        line = fp.readline()
+        if not line: break
+        
+        line = line.strip()
+        VirusDB.append(line)
+    
+    fp.close()
 
 def MakeVirusDB():
     for pattern in VirusDB:
@@ -30,10 +40,11 @@ def SearchVDB(fmd5):
     return False,''
         
 if __name__=='__main__':
+    LoadVirusDB()
     MakeVirusDB()
     
     if len(sys.argv) != 2:
-        print 'Usage : antivirus.py [file]'
+        print 'Usage : main.py [file]'
         exit(0)
         
     fname = sys.argv[1]
@@ -50,7 +61,7 @@ if __name__=='__main__':
         
         ret, vname = SearchVDB(fmd5)
         if ret == True:
-            print '%s %s' %(fname, vname)
+            print '%s : %s' %(fname, vname)
         else:
             print '%s : ok' %(fname)
     else:
