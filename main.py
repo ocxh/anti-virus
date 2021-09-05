@@ -1,8 +1,10 @@
+import sys
 import os
 import hashlib
 import sys
 import zlib 
 import StringIO
+import imp
 import scanmod
 import curemod
 
@@ -87,10 +89,20 @@ if __name__=='__main__':
     
     if len(sys.argv) != 2:
         print 'Usage : main.py [file]'
-        exit(0)
+        sys.exit(0)
         
     fname = sys.argv[1]
-    ret, vname = scanmod.ScanVirus(vdb, vsize, sdb, fname)
+    
+    #try:out module, except:in module
+    try:
+        m = 'scanmod'
+        f, filename, desc = imp.find_module(m, [''])
+        module = imp.load_module(m, f, filename, desc)
+        cmd = 'ret, vname = module.ScanVirus(vdb, vsize, sdb, fname)'
+        exec cmd
+    except ImportError:
+        ret, vname = scanmod.ScanVirus(vdb, vsize, sdb, fname)
+        
     if ret == True:
         print '%s : %s' %(fname, vname)
         #curemod.CureDelete(fname)
