@@ -4,6 +4,7 @@ import sys
 import zlib 
 import StringIO
 import scanmod
+import curemod
 
 eicar = 'C:/Users/gksru/Documents/programming/anti-virus/eicar.txt'
 dummy = 'C:/Users/gksru/Documents/programming/anti-virus/Dummy.txt'
@@ -12,6 +13,7 @@ dummy = 'C:/Users/gksru/Documents/programming/anti-virus/Dummy.txt'
 VirusDB = []
 vdb=[]
 vsize=[]
+sdb=[]
 
 def DecodeKMD(fname):
     try:
@@ -58,13 +60,25 @@ def MakeVirusDB():
     for pattern in VirusDB:
         t=[]
         v = pattern.split(':')
-        t.append(v[1])
-        t.append(v[2])
-        vdb.append(t)
+        scan_func = v[0]
+        cure_func = v[1]
         
-        size = int(v[0])
-        if vsize.count(size) == 0:
-            vsize.append(size)
+        if scan_func == 'ScanMD5':
+            t.append(v[3])
+            t.append(v[4])
+            vdb.append(t)
+            
+            size = int(v[2])
+            if vsize.count(size) == 0:
+                vsize.append(size)
+                
+        elif scan_func == 'ScanStr':
+            t.append(int(v[2]))
+            t.append(v[3])
+            t.append(v[4])
+            sdb.append(t)
+            
+        
         
         
 if __name__=='__main__':
@@ -76,10 +90,9 @@ if __name__=='__main__':
         exit(0)
         
     fname = sys.argv[1]
-    ret, vname = scanmod.ScanMD5(vdb, vsize, fname)
+    ret, vname = scanmod.ScanVirus(vdb, vsize, sdb, fname)
     if ret == True:
         print '%s : %s' %(fname, vname)
+        #curemod.CureDelete(fname)
     else:
         print '%s : ok' %(fname)
-else:
-    print '%s : ok' %(fname)

@@ -23,3 +23,29 @@ def ScanMD5(vdb, vsize, fname):
         
         ret, vname = SearchVDB(vdb, fmd5)
     return ret, vname
+    
+def ScanStr(fp, offset, mal_str):
+    size = len(mal_str)
+    
+    fp.seek(offset)
+    buf = fp.read(size)
+    
+    if buf == mal_str:
+        return True
+    else:
+        return False
+        
+def ScanVirus(vdb, vsize, sdb, fname):
+    ret, vname = ScanMD5(vdb, vsize, fname)
+    if ret == True:
+        return ret, vname
+    
+    fp = open(fname, 'rb')
+    for t in sdb:
+        if ScanStr(fp, t[0], t[1]) == True:
+            ret = True
+            vname = t[2]
+            break
+    fp.close()
+    
+    return ret, vname
