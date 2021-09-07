@@ -21,6 +21,7 @@ def ScanMD5(vdb, vsize, fname):
         m.update(buf)
         fmd5 = m.hexdigest()
         
+        
         ret, vname = SearchVDB(vdb, fmd5)
     return ret, vname
     
