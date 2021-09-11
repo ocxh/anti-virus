@@ -1,13 +1,11 @@
-import k2rc4
+import k2rsa
+import k2kmdfile
 
-if __name__ == '__main__':
-    rc4 = k2rc4.RC4()
-    rc4.set_key('PASSWORD1234')
-    t1 = rc4.crypt('hello')
-    
-    
-    rc4 = k2rc4.RC4()
-    rc4.set_key('PASSWORD1234')
-    t2 = rc4.crypt(t1)
-    print t2
+k2rsa.create_key('key.pkr', 'key_str')
+
+ret = k2kmdfile.make('readme.txt')
+if ret:
+    pu = k2rsa.read_key('key.pkr')
+    k = k2kmdfile.KMD('readme.kmd', pu)
+    print k.body
     

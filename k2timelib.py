@@ -34,3 +34,6 @@ def get_now_time(now=None):
     t_s = (now.tm_sec / 2) & 0x001F
     
     return (t_h | t_m | t_s) & 0xFFFF
+    
+
+        
