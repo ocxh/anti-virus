@@ -30,10 +30,13 @@ def make(src_fname, debug=False):
     
     kmd_data = "KAVM"
     
+    ret_date = k2timelib.get_now_date()
+    ret_time = k2timelib.get_now_time()
+    
     val_date = struct.pack('<H', ret_date)
     val_time = struct.pack('<H', ret_time)
     
-    reserved_buf = val_data + val_time + (chr(0) * 28)
+    reserved_buf = val_date + val_time + (chr(0) * 28)
     
     kmd_data += reserved_buf
     
@@ -161,7 +164,7 @@ class KMD(KMDConstants):
                 raise KMDFormatError('KMD Header magic not found.')
         
         tmp = self.__kmd_data[self.KMD_DATE_OFFSET:self.KMD_DATE_OFFSET +self.KMD_DATE_LENGTH]
-        self.date = k2timelib.convert_data(struct.unpack('<H', tmp)[0]
+        self.date = k2timelib.convert_data(struct.unpack('<H', tmp)[0])
         
         tmp = self.__kmd_data[self.KMD_TIME_OFFSET:self.KMD_TIME_OFFSET + self.KMD_TIME_LENGTH]
         self.time = k2timelib.convert_time(struct.unpack('<H', tmp)[0])
@@ -183,7 +186,7 @@ class KMD(KMDConstants):
             print len(self.body)
             
     def __get_rc4_key(self):
-        e_key =self.__kmd_data[self.KMD_RC4_KEY_OFFSET]: self.KMD_RC4_KEY_OFFSET + self.KMD_RC4_KEY_LENGTH:self.KMD_MD5_OFFSET]
+        e_key =self.__kmd_data[self.KMD_RC4_KEY_OFFSET: self.KMD_RC4_KEY_OFFSET + self.KMD_RC4_KEY_LENGTH:self.KMD_MD5_OFFSET]
         r = k2rc4.RC4()
         r.set_key(self.__rc4_key)
         return r.crypt(e_kmd_data)

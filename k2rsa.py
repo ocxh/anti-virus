@@ -159,7 +159,7 @@ def read_key(key_filename):
         with open(key_filename, 'rt') as fp:
             b = fp.read()
             s = base64.b64decode(b)
-            key = malshal.loads(s)
+            key = marshal.loads(s)
             
         return key
     except IOError:
