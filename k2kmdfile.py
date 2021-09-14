@@ -26,6 +26,7 @@ def make(src_fname, debug=False):
     if not (rsa_pr and rsa_pu):
         if debug:
             print 'ERROR : Cannot find the Key files!'
+            print 'Error: k2kmdfile -> line, 29'
         return False
     
     kmd_data = "KAVM"
@@ -55,7 +56,10 @@ def make(src_fname, debug=False):
         
         d_key = k2rsa.crypt(e_key, rsa_pu)
         
+        
+        
         if key==d_key and len(key)==len(d_key):
+            
             tmp_kmd_data += e_key
             
             buf1 = open(pyc_name, 'rb').read()
@@ -87,30 +91,30 @@ def make(src_fname, debug=False):
             if len(e_md5) != 32:
                 continue
             
-            d_md5 = k2rea.crypt(e_md5, rsa_pu)
+            d_md5 = k2rsa.crypt(e_md5, rsa_pu)
             
             if m == d_md5:
                 kmd_data += tmp_kmd_data + e_md5
                 break
         
-        ext = fname.find('.')
-        kmd_name = fname[0:ext] + '.kmd'
+    ext = fname.find('.')
+    kmd_name = fname[0:ext] + '.kmd'
         
-        try:
-            if kmd_data:
-                open(kmd_name, 'wb').write(kmd_data)
+    try:
+        if kmd_data:
+            open(kmd_name, 'wb').write(kmd_data)
+            print pyc_name
+            os.remove(pyc_name)
                 
-                os.remove(pyc_name)
-                
-                if debug:
-                    print 'Success : %-13s -> %s' %(fname, kmd_name)
-                return True
-            else:
-                raise IOError
-        except IOError:
             if debug:
-                print 'Fail : %s' %fname
-            return False
+                print 'Success : %-13s -> %s' %(fname, kmd_name)
+            return True
+        else:
+            raise IOError
+    except IOError:
+        if debug:
+            print 'Fail : %s' %fname
+        return False
             
 def ntimes_md5(buf, ntimes):
     md5 = hashlib.md5()
@@ -179,10 +183,12 @@ class KMD(KMDConstants):
         
         e_kmd_data = self.__get_body()
         if debug:
+            print 'k2kmdfile -> line, 186'
             print len(e_kmd_data)
         
         self.body = zlib.decompress(e_kmd_data)
         if debug:
+            print 'k2kmdfile -> line, 191'
             print len(self.body)
             
     def __get_rc4_key(self):

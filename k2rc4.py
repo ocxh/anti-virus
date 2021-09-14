@@ -8,6 +8,7 @@ class RC4:
         self.__K_j = 0
         
     def set_key(self, password):
+        
         for i in range(len(password)):
             self.__Key.append(ord(password[i]))
         self.__init_rc4()
@@ -49,7 +50,7 @@ class RC4:
         i = (i+1) % 256
         j = (j+self.__S[i]) % 256
         self.__swap(i, j)
-        t = (self.__S[i] + self.__S[j] % 256)
+        t = (self.__S[i] + self.__S[j]) % 256
         
         self.__K_i = i
         self.__K_j = j
