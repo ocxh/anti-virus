@@ -8,9 +8,9 @@ class RC4:
         self.__K_j = 0
         
     def set_key(self, password):
-        
         for i in range(len(password)):
             self.__Key.append(ord(password[i]))
+            
         self.__init_rc4()
         
     def crypt(self, data):

@@ -192,9 +192,16 @@ class KMD(KMDConstants):
             print len(self.body)
             
     def __get_rc4_key(self):
-        e_key =self.__kmd_data[self.KMD_RC4_KEY_OFFSET: self.KMD_RC4_KEY_OFFSET + self.KMD_RC4_KEY_LENGTH:self.KMD_MD5_OFFSET]
+        e_key =self.__kmd_data[self.KMD_RC4_KEY_OFFSET: self.KMD_RC4_KEY_OFFSET + self.KMD_RC4_KEY_LENGTH]
+        
+        return k2rsa.crypt(e_key, self.__rsa_pu)
+    
+    def __get_body(self):
+        e_kmd_data = self.__kmd_data[self.KMD_RC4_KEY_OFFSET + self.KMD_RC4_KEY_LENGTH: self.KMD_MD5_OFFSET]
+        
         r = k2rc4.RC4()
         r.set_key(self.__rc4_key)
+        
         return r.crypt(e_kmd_data)
     
     def __get_md5(self):
