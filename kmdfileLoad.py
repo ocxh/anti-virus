@@ -10,7 +10,7 @@ module = k2kmdfile.load('dummy', k.body)
 print dir(module)
 '''
 
-''' return the function of kmdfile.load 
+''' 1. return the function of kmdfile.load 
 pu = k2rsa.read_key('key.pkr')
 k = k2kmdfile.KMD('dummy.kmd', pu)
 module = k2kmdfile.load('dummy', k.body)
@@ -20,7 +20,7 @@ print kav.getinfo()
 kav.uninit()
 '''
 
-''' use imort dummy
+''' 2. use imort dummy
 pu = k2rsa.read_key('key.pkr')
 k = k2kmdfile.KMD('dummy.kmd', pu)
 module = k2kmdfile.load('dummy', k.body)
