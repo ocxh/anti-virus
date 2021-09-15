@@ -5,6 +5,8 @@ import random
 import shutil
 import struct
 import sys
+import imp
+import marshal
 import zlib
 import k2rc4
 import k2rsa
@@ -99,11 +101,12 @@ def make(src_fname, debug=False):
         
     ext = fname.find('.')
     kmd_name = fname[0:ext] + '.kmd'
+    print (kmd_name)
         
     try:
         if kmd_data:
             open(kmd_name, 'wb').write(kmd_data)
-            print pyc_name
+            
             os.remove(pyc_name)
                 
             if debug:
@@ -123,6 +126,17 @@ def ntimes_md5(buf, ntimes):
         md5.update(md5hash)
         md5hash = md5.hexdigest()
     return md5hash
+    
+def load(mod_name, buf):
+    if buf[:4] == '03F30D0A'.decode('hex'):
+        code = marshal.loads(buf[8:])
+        module = imp.new_module(mod_name)
+        exec(code, module.__dict__)
+        sys.modules[mod_name] = module
+        
+        return module
+    else:
+        return None
     
 class KMDFormatError(Exception):
     def __init__(self, value):
