@@ -7,5 +7,6 @@ if k2.set_plugins('plugins'):
         print '[*] Success : create_instance'
 
         ret = kav.init()
+        info = kav.getinfo()
         kav.uninit()
         

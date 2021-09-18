@@ -144,3 +144,23 @@ class EngineInstance:
                     print '[-] %s.uninit() : %d' %(inst.__module__, ret)
             except AttributeError:
                 continue
+
+    def getinfo(self):
+        ginfo = []
+
+        if self.debug:
+            print '[*] KavMain.getinfo() :'
+
+        for inst in self.kavmain_inst:
+            try:
+                ret = inst.getinfo()
+                ginfo.append(ret)
+
+                if self.debug:
+                    print '     [-] %s.getinfo() :' %inst.__module__
+                    for key in ret.keys():
+                        print '     - %-10s : %s' %(key, ret[key])
+            
+            except AttributeError:
+                continue
+        return ginfo
