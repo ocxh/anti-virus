@@ -2,6 +2,7 @@ import os
 import StringIO
 import datetime
 import types
+import mmap
 
 import k2kmdfile
 import k2rsa
@@ -198,3 +199,37 @@ class EngineInstance:
                 continue
 
         return vlist
+
+    def scan(self, filename):
+        if self.debug:
+            print '[*] KavMain.scan() :'
+
+            try:
+                ret = False
+                vname = ''
+                mid = -1
+                eid = -1
+
+                fp = open (filename, 'rb')
+                mm = mmap.mmap(fp.fileno(), 0, access=mmab.ACCESS_READ)
+
+                for i, inst in enumerate(self.kavmain_inst):
+                    try:
+                        ret, vname, mid = inst.scan(mm, filename)
+                        if ret:
+                            eid = i
+
+                            if self.debug:
+                                print '[-] %s.scan() : %s' %(inst.__module__, vname)
+                            
+                            break
+                    except AttributeError:
+                        continue
+                if mm:
+                    mm.close()
+                if fp:
+                    fp.close()
+                return ret, vname, mid, eid
+            except IOError:
+                pass
+            return False, '', -1. -1

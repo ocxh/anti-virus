@@ -19,5 +19,7 @@ if k2.set_plugins('plugins'):
         vlist = kav.listvirus()
         print '[*] Not used Callback : %d' % len(vlist)
 
+        ret, vname, mid, eid = kav.scan('dummy.txt')
+
         kav.uninit()
         

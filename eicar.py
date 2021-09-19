@@ -19,7 +19,7 @@ class KavMain:
                 fmd5 = m.hexdigest()
                 
                 if fmd5 == '44d88612fea8a8f36de82e1278abb02f':
-                    return True, 'EICAR-Test-File (not a virus)'
+                    return True, 'EICAR-Test-File (not a virus)',0
         except IOError:
             pass
         
