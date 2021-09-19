@@ -143,7 +143,7 @@ class EngineInstance:
             try:
                 ret = inst.uninit()
                 if self.debug:
-                    print '[-] %s.uninit() : %d' %(inst.__module__, ret)
+                    print '     [-] %s.uninit() : %d' %(inst.__module__, ret)
             except AttributeError:
                 continue
 
@@ -204,32 +204,37 @@ class EngineInstance:
         if self.debug:
             print '[*] KavMain.scan() :'
 
-            try:
-                ret = False
-                vname = ''
-                mid = -1
-                eid = -1
+        try:
+            
+            ret = False
+            vname = ''
+            mid = -1
+            eid = -1
 
-                fp = open (filename, 'rb')
-                mm = mmap.mmap(fp.fileno(), 0, access=mmab.ACCESS_READ)
+            fp = open(filename, 'rb')
+            mm = mmap.mmap(fp.fileno(), 0, access=mmap.ACCESS_READ)
 
-                for i, inst in enumerate(self.kavmain_inst):
-                    try:
-                        ret, vname, mid = inst.scan(mm, filename)
-                        if ret:
-                            eid = i
+            for i, inst in enumerate(self.kavmain_inst):
+                try:
+                    ret, vname, mid = inst.scan(mm, filename)
+                    if ret:
+                        eid = i
+                        
 
-                            if self.debug:
-                                print '[-] %s.scan() : %s' %(inst.__module__, vname)
+                        if self.debug:
+                            print '[-] %s.scan() : %s' %(inst.__module__, vname)
                             
-                            break
-                    except AttributeError:
-                        continue
-                if mm:
-                    mm.close()
-                if fp:
-                    fp.close()
-                return ret, vname, mid, eid
-            except IOError:
-                pass
-            return False, '', -1. -1
+                        break
+                except AttributeError:
+                    continue
+            if mm:
+                mm.close()
+            if fp:
+                fp.close()
+            
+            return ret, vname, mid, eid
+
+        except IOError:
+            pass
+
+        return False, '', -1, -1
