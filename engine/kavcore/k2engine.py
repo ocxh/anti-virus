@@ -1,6 +1,7 @@
 import os
 import StringIO
 import datetime
+import types
 
 import k2kmdfile
 import k2rsa
@@ -164,3 +165,36 @@ class EngineInstance:
             except AttributeError:
                 continue
         return ginfo
+
+    def listvirus(self, *callback):
+        vlist = []
+
+        argc = len(callback)
+
+        if argc == 0:
+            cb_fn = None
+        elif argc == 1:
+            cb_fn = callback[0]
+        else:
+            return []
+        
+        if self.debug:
+            print '[*] KavMain.listvirus() : '
+        
+        for inst in self.kavmain_inst:
+            try:
+                ret = inst.listvirus()
+
+                if isinstance(cb_fn, types.FunctionType):
+                    cb_fn(inst.__module__, ret)
+                else:
+                    vlist += ret
+                
+                if self.debug:
+                    print '     [-] %s.listvirus() :' %inst.__module__
+                    for vname in ret:
+                        print '         - %s' %vname
+            except AttributeError:
+                continue
+
+        return vlist
