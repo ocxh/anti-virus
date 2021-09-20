@@ -205,7 +205,6 @@ class EngineInstance:
             print '[*] KavMain.scan() :'
 
         try:
-            
             ret = False
             vname = ''
             mid = -1
@@ -222,7 +221,7 @@ class EngineInstance:
                         
 
                         if self.debug:
-                            print '[-] %s.scan() : %s' %(inst.__module__, vname)
+                            print '     [-] %s.scan() : %s' %(inst.__module__, vname)
                             
                         break
                 except AttributeError:
@@ -234,7 +233,8 @@ class EngineInstance:
             
             return ret, vname, mid, eid
 
-        except IOError:
+        except IOError, e:
+            print e
             pass
 
         return False, '', -1, -1

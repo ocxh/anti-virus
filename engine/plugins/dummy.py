@@ -25,7 +25,7 @@ class KavMain:
         except IOError:
             pass
         
-        return Flase, '', -1
+        return False, '', -1
         
     def disinfect(self, filename, malware_id):
         try:

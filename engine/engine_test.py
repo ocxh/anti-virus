@@ -12,6 +12,7 @@ if k2.set_plugins('plugins'):
 
         ret = kav.init()
         info = kav.getinfo()
+
         vlist = kav.listvirus(listvirus_callback)
 
         print '[*] Used Callback    : %d' %len(vlist)
@@ -19,7 +20,7 @@ if k2.set_plugins('plugins'):
         vlist = kav.listvirus()
         print '[*] Not used Callback : %d' % len(vlist)
 
-        ret, vname, mid, eid = kav.scan('Dummy.txt')
+        ret, vname, mid, eid = kav.scan('/Users/ocx/programming/engine/plugins/Dummy.txt')
 
         kav.uninit()
         
