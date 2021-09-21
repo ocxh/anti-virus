@@ -30,7 +30,7 @@ class KavMain:
     def disinfect(self, filename, malware_id):
         try:
             if malware_id == 0:
-                os.remove(filename)
+                print 'remove example'
                 return True
             
         except IOError:

@@ -21,6 +21,8 @@ if k2.set_plugins('plugins'):
         print '[*] Not used Callback : %d' % len(vlist)
 
         ret, vname, mid, eid = kav.scan('/Users/ocx/programming/engine/plugins/Dummy.txt')
+        if ret:
+            kav.disinfect('/Users/ocx/programming/engine/plugins/Dummy.txt', mid, eid)
 
         kav.uninit()
         
