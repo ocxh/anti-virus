@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append('/Users/ocx/programming/engine/kavcore')
+sys.path.append('../kavcore')
 import k2kmdfile
 
 if __name__ == '__main__':

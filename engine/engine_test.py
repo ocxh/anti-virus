@@ -20,9 +20,9 @@ if k2.set_plugins('plugins'):
         vlist = kav.listvirus()
         print '[*] Not used Callback : %d' % len(vlist)
 
-        ret, vname, mid, eid = kav.scan('/Users/ocx/programming/engine/plugins/Dummy.txt')
+        ret, vname, mid, eid = kav.scan('./plugins/eicar.txt')
         if ret:
-            kav.disinfect('/Users/ocx/programming/engine/plugins/Dummy.txt', mid, eid)
+            kav.disinfect('./plugins/eicar.txt', mid, eid)
 
         kav.uninit()
         
