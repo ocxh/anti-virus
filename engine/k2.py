@@ -3,7 +3,7 @@ from ctypes import windll, Structure, c_short, c_ushort, byref
 
 KAV_VERSION = '0.27'
 KAV_BUILDDATE = 'Oct 30 2017'
-KAV_LASTYEAR = KAV_BUILDDATE[len(KAV_BUILDDATE) -4 :]
+KAV_LASTYEAR = KAV_BUILDDATE[len(KAV_BUILDDATE)-4:]
 
 FOREGROUND_BLACK = 0x0000
 FOREGROUND_BLUE = 0x0001
@@ -80,13 +80,12 @@ def print_error(msg):
     print (msg)
 
 def print_k2logo():
-    logo = '''KICOM Anti-Virus II (for %s) Ver %s (%s) Copyright (C) 1995-%s Kei Choi. ALL rights reserved.
-    '''
-
+    logo = '''    KICOM Anti-Virus II (for %s) Ver %s (%s) 
+    Copyright (C) 1995-%s Kei Choi. ALL rights reserved.'''
+    print '----------------------------------------------------------------'
+    print (logo %(sys.platform.upper(), KAV_VERSION, KAV_BUILDDATE, KAV_LASTYEAR))
+    print '----------------------------------------------------------------'
     
-    s = logo %(sys.platform.upper(), KAV_VERSION, KAV_BUILDDATE, KAV_LASTYEAR)
-    cprint(s, FOREGROUND_CYAN | FOREGROUND_INTENSITY)
-
 #main()
 def main():
     print_k2logo()
