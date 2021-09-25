@@ -1,5 +1,6 @@
 import sys
 from ctypes import windll, Structure, c_short, c_ushort, byref
+from optparse import OptionParser
 
 KAV_VERSION = '0.27'
 KAV_BUILDDATE = 'Oct 30 2017'
@@ -86,9 +87,81 @@ def print_k2logo():
     print (logo %(sys.platform.upper(), KAV_VERSION, KAV_BUILDDATE, KAV_LASTYEAR))
     print '----------------------------------------------------------------'
     
+class OptionParsingError(RuntimeError):
+    def __init__(self, msg):
+        self.msg = msg
+class OptionParingExit(Exception):
+    def __init__(self, status, msg):
+        self.msg = msg
+        self.status = status
+
+class ModifiedOptionParser(OptionParser):
+    def error(self, msg):
+        raise OptionParsingError(msg)
+    
+    def exit(self, status=0, msg=None):
+        raise OptionParsingExit(status, msg)
+
+def define_options():
+    usage = "Usage: %prog path[s] [options]"
+    parser = ModifiedOptionParser(add_help_option=False, usage=usage)
+    
+    parser.add_option("-f", "--files", action="store_true", dest="opt_files", default=True)
+    parser.add_option("-I","--list",action="store_true", dest="opt_list", default=True)
+    parser.add_option("-V","--vlist",action="store_true", dest="opt_vlist", default=False)
+    parser.add_option("-?","--help",action="store_true", dest="opt_help", default=False)
+    
+    return parser
+    
+def parser_options():
+    parser = define_options()
+    
+    if len(sys.argv) < 2:
+        return "NONE_OPTION", None
+    else:
+        try:
+            (options, args) = parser.parse_args()
+            if len(args) == 0:
+                return options, None
+        except OptionParsingError, e:
+            return 'ILLEGAL_OPTION', e.msg
+        except OptionParsingExit, e:
+            return 'ILLEGAL_OPTION', e.msg
+        
+        return options, args
+
+def print_usage():
+    print '\nUsage: k2.py path[s] [options]'
+
+def print_options():
+    options_string= \
+        '''Options:
+                -f, --files         scan files *
+                -I, --list          display all files
+                -V, --vlist         display virus list
+                -?, --help          this help
+                                    * = default option'''
+    print options_string
+
 #main()
 def main():
+    options, args = parser_options()
+    
     print_k2logo()
+    
+    if options == 'NONE_OPTION':
+        print_usage()
+        print_options()
+        return 0
+    elif options == 'ILLEGAL_OPTION':
+        print_usage()
+        print 'Error: %s' % args
+        return 0
+      
+    if options.opt_help:
+        print_usage()
+        print_options()
+        return 0
 
 if __name__ == '__main__':
     main()
