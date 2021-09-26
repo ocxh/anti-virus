@@ -1,6 +1,8 @@
 import sys
+import os
 from ctypes import windll, Structure, c_short, c_ushort, byref
 from optparse import OptionParser
+import kavcore.k2engine
 
 KAV_VERSION = '0.27'
 KAV_BUILDDATE = 'Oct 30 2017'
@@ -142,6 +144,10 @@ def print_options():
                 -?, --help          this help
                                     * = default option'''
     print options_string
+    
+def listvirus_callback(plugin_name, vnames):
+    for vname in vnames:
+        print '%-50s [%s.kmd]' %(vname, plugin_name)
 
 #main()
 def main():
@@ -162,6 +168,36 @@ def main():
         print_usage()
         print_options()
         return 0
+    
+    k2 = kavcore.k2engine.Engine()
+    if not k2.set_plugins('plugins'):
+        print
+        print_error('KICOM Anti-Virus Engine set_plugins')
+        return 0
+        
+    kav = k2.create_instance()
+    if not kav:
+        print
+        print_error('KICOM Anti-Virus Engine create_instance')
+        return 0
+        
+    if not kav.init():
+        print
+        print_error('KICOM Anti-Virus Engine init')
+        return 0
+    
+    if options.opt_vlist is True:
+        kav.listvirus(listvirus_callback)
+    else:
+        if args:
+            for scan_path in args:
+                scan_path = os.path.abspath(scan_path)
+                
+                if os.path.exists(scan_path):
+                    print scan_path
+                else:
+                    print_error('Invalid path: \'%s\'' %scan_path)
+    kav.uninit()
 
 if __name__ == '__main__':
     main()
