@@ -185,6 +185,10 @@ def main():
         print
         print_error('KICOM Anti-Virus Engine init')
         return 0
+
+    c = kav.get_version()
+    msg = '\rLast updated %s UTC\n\n' %c.ctime()
+    cprint(msg, FOREGROUND_GREY)
     
     if options.opt_vlist is True:
         kav.listvirus(listvirus_callback)

@@ -255,3 +255,6 @@ class EngineInstance:
             pass
         
         return ret
+    
+    def get_version(self):
+        return self.max_datetime
